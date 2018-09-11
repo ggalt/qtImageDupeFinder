@@ -19,7 +19,7 @@ class imageFiles : public QObject
 {
     Q_OBJECT
 public:
-    explicit imageFiles(QObject *parent = 0);
+    explicit imageFiles(QObject *parent = nullptr);
     ~imageFiles(void);
 
     Q_INVOKABLE QString nextImage(void);

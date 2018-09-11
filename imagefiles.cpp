@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QStandardPaths>
+#include <QList>
+#include <QListIterator>
 
 #include "imagefiles.h"
 #include "imageinfo.h"
@@ -103,9 +105,18 @@ void imageFiles::readImageURLsFromDisk(QDir d)
             }
         }
     }
-    for( QMultiHash<QString, imageInfo*>::const_iterator hashIt = imageList.cbegin(), end = imageList.cend();
-         hashIt != end; hashIt++ ) {
-        qDebug() << hashIt.key() << hashIt.value();
+
+    QHashIterator<QString, imageInfo*> hashIt(imageList);
+    while(hashIt.hasNext()){
+        hashIt.next();
+        QList<imageInfo*> localList = imageList.values(hashIt.key());
+        qDebug() << hashIt.key() << localList.count();
+        if(localList.count() > 1) {
+            QListIterator<imageInfo*> listIt(localList);
+            while(listIt.hasNext()) {
+                qDebug() << "\t" << listIt.next()->imageFullPath();
+            }
+        }
     }
 //    for (QHash<int, QString>::const_iterator it = hash.cbegin(), end = hash.cend(); it != end; ++it) {
 //        cout << "The key: " << it.key() << endl
