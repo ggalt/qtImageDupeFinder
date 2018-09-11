@@ -8,7 +8,7 @@
 #include <QDir>
 #include <QUrl>
 #include <QQmlEngine>
-#include <QMultiHash>
+#include <QHash>
 #include "imageinfo.h"
 
 
@@ -36,7 +36,8 @@ private:
     MyImageProvider *imageProvider;
 
     QStringList photoUrlList;
-    QMultiHash<QString, imageInfo*> imageList;
+    QHash<QString, QList<imageInfo*>*> imageList;
+//    QMultiHash<QString, imageInfo*> imageList;
     int imageCount;
     int imagePointer;
     QList<int> imagesShown;

@@ -100,24 +100,41 @@ void imageFiles::readImageURLsFromDisk(QDir d)
 //                qDebug() << p->photoFileName() << "--" << p->photoPath() << "--" << p->photoFullPath();
 
 
-                imageList.insert(p->imageFileNameNormalized(),p);
+//                imageList.insert(p->imageFileNameNormalized(),p);
 //                qDebug() << p->imageFileNameNormalized();
+                if(!imageList.contains(p->imageFileNameNormalized())) {
+                    QList<imageInfo*> *newList = new QList<imageInfo*>;
+                    imageList.insert(p->imageFileNameNormalized(),newList);
+                }
+
+                imageList.value(p->imageFileNameNormalized())->append(p);
             }
         }
     }
 
-    QHashIterator<QString, imageInfo*> hashIt(imageList);
-    while(hashIt.hasNext()){
-        hashIt.next();
-        QList<imageInfo*> localList = imageList.values(hashIt.key());
-        qDebug() << hashIt.key() << localList.count();
-        if(localList.count() > 1) {
-            QListIterator<imageInfo*> listIt(localList);
-            while(listIt.hasNext()) {
-                qDebug() << "\t" << listIt.next()->imageFullPath();
-            }
+    QHashIterator<QString, QList<imageInfo*>*> hashIt(imageList);
+    while(hashIt.hasNext()) {
+        QList<imageInfo*> *l = hashIt.next().value();
+        qDebug() << "item count:" << l->count();
+        QListIterator<imageInfo*> listIt(*l);
+        while(listIt.hasNext()) {
+            imageInfo *t = listIt.next();
+            qDebug() << t->imageFileName() << t->imageFullPath();
         }
     }
+
+//    QHashIterator<QString, imageInfo*> hashIt(imageList);
+//    while(hashIt.hasNext()){
+//        hashIt.next();
+//        QList<imageInfo*> localList = imageList.values(hashIt.key());
+//        qDebug() << hashIt.key() << localList.count();
+//        if(localList.count() > 1) {
+//            QListIterator<imageInfo*> listIt(localList);
+//            while(listIt.hasNext()) {
+//                qDebug() << "\t" << listIt.next()->imageFullPath();
+//            }
+//        }
+//    }
 //    for (QHash<int, QString>::const_iterator it = hash.cbegin(), end = hash.cend(); it != end; ++it) {
 //        cout << "The key: " << it.key() << endl
 //        cout << "The value: " << it.value() << endl;
