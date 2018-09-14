@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 //#include <QQmlApplicationEngine>
 #include "myapplicationwindow.h"
+#include "imagefiles.h"
+#include "imageinfo.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +19,7 @@ int main(int argc, char *argv[])
 //    if (engine.rootObjects().isEmpty())
 //        return -1;
 
+    qmlRegisterType<imageFiles>("com.georgegalt.qtImageDueFinder",1,0,"imageFiles");
     myApplicationWindow win;
     win.Init();
 

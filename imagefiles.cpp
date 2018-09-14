@@ -112,16 +112,18 @@ void imageFiles::readImageURLsFromDisk(QDir d)
         }
     }
 
-    QHashIterator<QString, QList<imageInfo*>*> hashIt(imageList);
-    while(hashIt.hasNext()) {
-        QList<imageInfo*> *l = hashIt.next().value();
-        qDebug() << "item count:" << l->count();
-        QListIterator<imageInfo*> listIt(*l);
-        while(listIt.hasNext()) {
-            imageInfo *t = listIt.next();
-            qDebug() << t->imageFileName() << t->imageFullPath();
-        }
-    }
+//    QHashIterator<QString, QList<imageInfo*>*> hashIt(imageList);
+//    while(hashIt.hasNext()) {
+//        QList<imageInfo*> *l = hashIt.next().value();
+//        qDebug() << "item count:" << l->count();
+//        QListIterator<imageInfo*> listIt(*l);
+//        while(listIt.hasNext()) {
+//            imageInfo *t = listIt.next();
+//            qDebug() << t->imageFileName() << t->imageFullPath();
+//        }
+//    }
+
+//    qDebug() << imageList;
 
 //    QHashIterator<QString, imageInfo*> hashIt(imageList);
 //    while(hashIt.hasNext()){

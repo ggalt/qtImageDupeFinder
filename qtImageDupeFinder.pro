@@ -17,7 +17,8 @@ SOURCES += \
     imageinfo.cpp \
     imagefiles.cpp \
     myimageprovider.cpp \
-    myapplicationwindow.cpp
+    myapplicationwindow.cpp \
+    imagelistmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,4 +37,5 @@ HEADERS += \
     imageinfo.h \
     imagefiles.h \
     myimageprovider.h \
-    myapplicationwindow.h
+    myapplicationwindow.h \
+    imagelistmodel.h
