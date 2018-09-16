@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 Rectangle {
     id: imageGroupDelegate
     width: parent.width
-    height: 60
+    height: 120
 
     function setChildrenState(newState) {
         for( var i = 0; i < children.lenght; i++ ) {
@@ -39,7 +39,7 @@ Rectangle {
 
     EdgedButton{
         id: imageRectangle
-        width: 60
+        width: height
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.top: parent.top
@@ -47,7 +47,7 @@ Rectangle {
 
     EdgedButton {
         id: countRectangle
-        width: 60
+        width: height
         anchors.top: parent.top
         anchors.left: imageRectangle.right
         anchors.bottom: parent.bottom

@@ -4,5 +4,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>ImageGroupDelegate.qml</file>
         <file>EdgedButton.qml</file>
+        <file>ImageDisplayWindow.qml</file>
+        <file>MainScrollWindow.qml</file>
     </qresource>
 </RCC>

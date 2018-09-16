@@ -118,10 +118,11 @@ void imageFiles::readImageURLsFromDisk(QDir d)
         if(m_imageList.value(myKey)->count() <= 1) {
             m_imageList.remove(myKey);
             strIt.remove();
-            qDebug() << myKey;
+//            qDebug() << myKey;
         }
 
     }
+    qDebug() << "Images to review:" << m_imageNameList.count();
 
 //    QHashIterator<QString, QList<imageInfo*>*> hashIt(m_imageList);
 //    while(hashIt.hasNext()){

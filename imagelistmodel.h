@@ -21,7 +21,7 @@ class ImageListModel : public QAbstractListModel
     Q_PROPERTY(QHash<QString, QList<imageInfo*>*> imageList READ imageList CONSTANT)
 
 public:
-    explicit ImageListModel(QObject *parent = nullptr);
+    ImageListModel(QObject *parent = nullptr);
     ImageListModel( const ImageListModel &otherModel );
     ~ImageListModel() {}
 
