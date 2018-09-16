@@ -10,6 +10,7 @@
 #include <QVariant>
 
 #include "imagefiles.h"
+#include "imagelistmodel.h"
 
 class myApplicationWindow : public QObject
 {
@@ -34,7 +35,8 @@ private:
 //    int displayDuration;
 //    int transitionDuration;
 
-    imageFiles *myImages;
+    imageFiles *m_Images;
+    ImageListModel *m_ImageListModel;
 };
 
 #endif // MYAPPLICATIONWINDOW_H

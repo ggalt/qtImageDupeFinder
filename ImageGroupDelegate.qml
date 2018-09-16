@@ -15,6 +15,15 @@ Rectangle {
         nameRectangle.state = newState;
     }
 
+    function listImagePaths() {
+        var imageCountVal = imageListModel.getCurImageListCount(index)
+        for(var i = 0; i < imageCountVal; i++) {
+            console.log(imageListModel.getImage(i))
+        }
+    }
+
+    state: "normal"
+
     gradient: Gradient {
         GradientStop {
             position: 0
@@ -26,6 +35,7 @@ Rectangle {
             color: "#4ccecdcd"
         }
     }
+
 
     EdgedButton{
         id: imageRectangle
@@ -41,6 +51,18 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: imageRectangle.right
         anchors.bottom: parent.bottom
+
+        Text {
+            id: imageCountText
+            x: 123
+            y: 23
+            color: "#ffffff"
+            text: imageListModel.getCurImageListCount(index)
+//            text: index
+            font.pointSize: 14
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 
     EdgedButton {
@@ -49,6 +71,17 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: countRectangle.right
         anchors.bottom: parent.bottom
+
+        Text {
+            id: imageNameText
+            x: 123
+            y: 23
+            color: "#ffffff"
+            text: imageListModel.getImageFileName(index)
+            font.pointSize: 14
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
     }
 
     MouseArea {
@@ -56,8 +89,9 @@ Rectangle {
         anchors.fill: parent
         onReleased: {
             imageGroupDelegate.setChildrenState( "Default" )
-            console.log(index, "Released")
-            //            thermoEventListDelegate.ListView.view.currentIndex=index
+            listImagePaths()
+//            console.log(index, "Released")
+//            thermoEventListDelegate.ListView.view.currentIndex=index
         }
         onPressed: {
             imageGroupDelegate.setChildrenState( "Pressed" )
@@ -92,6 +126,4 @@ Rectangle {
             //            }
         }
     ]
-
-    state: "normal"
 }

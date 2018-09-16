@@ -6,16 +6,27 @@
 #include <QStandardPaths>
 #include <QList>
 #include <QListIterator>
+#include <QStringList>
+#include <QMutableListIterator>
 
 #include "imagefiles.h"
 #include "imageinfo.h"
 
 imageFiles::imageFiles(QObject *parent) : QObject(parent)
 {
-    imagePointer = 0;
+    m_imagePointer = 0;
 
     qsrand(QDateTime::currentMSecsSinceEpoch());
-//    qsrand(5);
+    //    qsrand(5);
+}
+
+imageFiles::imageFiles( const imageFiles &i ) : QObject(i.parent())
+{
+    setImageList( i.imageList() );
+    setImageNameList( i.imageNameList() );
+    setImageCount( i.imageCount() );
+    setImagePointer( i.imagePointer() );
+    setTopDir( i.topDir() );
 }
 
 imageFiles::~imageFiles()
@@ -23,56 +34,49 @@ imageFiles::~imageFiles()
 
 }
 
-QString imageFiles::nextImage()
+QString imageFiles::nextImageName()
 {
-    if( imagePointer == 0) {
-        int randNum = qrand();
-//        qDebug() << "Random number:" << randNum;
-        imagesShown.insert(0, randNum % imageCount);
-    } else {
-        imagePointer--;
-        if(imagePointer < 0)
-            imagePointer = 0;
+    //    QString imageURL = "image://myImageProvider/"+photoUrlList.at(
+    //                imagesShown.at(imagePointer));
+    //    return imageURL;
+    if(m_imagePointer >= m_imageNameList.count())
+        return QString();
+    else {
+        //        qDebug() << "imagepointer:" << imagePointer;
+        return m_imageNameList.at(m_imagePointer++);
     }
-
-    QString imageURL = "image://myImageProvider/"+photoUrlList.at(
-                imagesShown.at(imagePointer));
-//    qDebug() << imageURL << imagesShown;
-    return imageURL;
 }
 
-QString imageFiles::previousImage()
+QString imageFiles::previousImageName()
 {
-    imagePointer+=2;    // NOT SURE WHY THIS NEEDS TO BE "PLUS 2" BUT IT WORKS
-    if(imagePointer >= imagesShown.size())
-        imagePointer = imagesShown.size()-1;
-
-    QString imageURL = "image://myImageProvider/"+photoUrlList.at(
-                imagesShown.at(imagePointer));
-//    qDebug() << imageURL;
-    return imageURL;
+    //    QString imageURL = "image://myImageProvider/"+photoUrlList.at(
+    //                imagesShown.at(imagePointer));
+    //    return imageURL;
+    if( m_imagePointer <= 0 )
+        return QString();
+    else {
+        //        qDebug() << "imagepointer:" << imagePointer;
+        return m_imageNameList.at(m_imagePointer--);
+    }
 }
 
 void imageFiles::ReadURLs()
 {
-    photoUrlList.clear();
-    imageList.clear();
+    m_imageList.clear();
 
 #ifdef Q_OS_LINUX
     //// Lenovo
     readImageURLsFromDisk(QDir("/home/ggalt/Pictures/"));
 
     //// Main
-//    readImageURLsFromDisk(QDir("/home/ggalt/Pictures/"));
+    //    readImageURLsFromDisk(QDir("/home/ggalt/Pictures/"));
 
 #else
     // Windows laptop
     readImageURLsFromDisk(QDir("C:/Users/ggalt66/Pictures/"));
     // Windows Desktop
-//    readImageURLsFromDisk(QDir("C:/Users/George Galt/Pictures"));
+    //    readImageURLsFromDisk(QDir("C:/Users/George Galt/Pictures"));
 #endif
-    imageCount = photoUrlList.size();
-
 }
 
 void imageFiles::setupImageProvider(QQmlEngine *eng)
@@ -83,10 +87,9 @@ void imageFiles::setupImageProvider(QQmlEngine *eng)
 
 void imageFiles::readImageURLsFromDisk(QDir d)
 {
-//    qDebug() << "Image URL:" << d;
-    photoUrlList.clear();
-    imageList.clear();
+    m_imageList.clear();
     QDirIterator it(d, QDirIterator::Subdirectories);
+    qDebug() << "Reading files from:" << d.absolutePath();
     while (it.hasNext()) {
         it.next();
         if( it.fileInfo().isFile() ) {
@@ -97,53 +100,41 @@ void imageFiles::readImageURLsFromDisk(QDir d)
                 p->setImagePath(QDir(it.fileInfo().absoluteDir()));
                 p->setImageFileName(it.fileInfo().fileName());
 
-//                qDebug() << p->photoFileName() << "--" << p->photoPath() << "--" << p->photoFullPath();
-
-
-//                imageList.insert(p->imageFileNameNormalized(),p);
-//                qDebug() << p->imageFileNameNormalized();
-                if(!imageList.contains(p->imageFileNameNormalized())) {
+                if(!m_imageList.contains(p->imageFileNameNormalized())) {
                     QList<imageInfo*> *newList = new QList<imageInfo*>;
-                    imageList.insert(p->imageFileNameNormalized(),newList);
+                    m_imageList.insert(p->imageFileNameNormalized(),newList);
+                    m_imageNameList.append(p->imageFileNameNormalized());
                 }
 
-                imageList.value(p->imageFileNameNormalized())->append(p);
+                m_imageList.value(p->imageFileNameNormalized())->append(p);
             }
         }
     }
 
-//    QHashIterator<QString, QList<imageInfo*>*> hashIt(imageList);
-//    while(hashIt.hasNext()) {
-//        QList<imageInfo*> *l = hashIt.next().value();
-//        qDebug() << "item count:" << l->count();
-//        QListIterator<imageInfo*> listIt(*l);
-//        while(listIt.hasNext()) {
-//            imageInfo *t = listIt.next();
-//            qDebug() << t->imageFileName() << t->imageFullPath();
-//        }
-//    }
+    // remove lines with only a single image (obviously no dupes)
+    QMutableListIterator<QString> strIt(m_imageNameList);
+    while (strIt.hasNext()) {
+        QString myKey = strIt.next();
+        if(m_imageList.value(myKey)->count() <= 1) {
+            m_imageList.remove(myKey);
+            strIt.remove();
+            qDebug() << myKey;
+        }
 
-//    qDebug() << imageList;
+    }
 
-//    QHashIterator<QString, imageInfo*> hashIt(imageList);
+//    QHashIterator<QString, QList<imageInfo*>*> hashIt(m_imageList);
 //    while(hashIt.hasNext()){
-//        hashIt.next();
-//        QList<imageInfo*> localList = imageList.values(hashIt.key());
-//        qDebug() << hashIt.key() << localList.count();
-//        if(localList.count() > 1) {
-//            QListIterator<imageInfo*> listIt(localList);
+//        QString myKey = hashIt.next().key();
+//        QList<imageInfo*> *localList = m_imageList.value(myKey);
+//        qDebug() << myKey << localList->count();
+//        if(localList->count() > 1) {
+//            QListIterator<imageInfo*> listIt(*localList);
 //            while(listIt.hasNext()) {
 //                qDebug() << "\t" << listIt.next()->imageFullPath();
 //            }
 //        }
 //    }
-//    for (QHash<int, QString>::const_iterator it = hash.cbegin(), end = hash.cend(); it != end; ++it) {
-//        cout << "The key: " << it.key() << endl
-//        cout << "The value: " << it.value() << endl;
-//        cout << "Also the value: " << (*it) << endl;
-//    }
-//    QHashIterator<QString, imageInfo*> hashIt(imageList);
-//    while(hashIt.hasNext()) {
-//        qDebug() << hashIt.value();
-//    }
 }
+
+Q_DECLARE_METATYPE(imageFiles)

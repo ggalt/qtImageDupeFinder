@@ -13,7 +13,7 @@ ApplicationWindow {
         ListView {
             id: mainListView
             width: parent.width
-            model: 20
+            model: imageListModel
             delegate: ImageGroupDelegate{}
 //            delegate: ItemDelegate {
 //                text: "Item " + (index + 1)

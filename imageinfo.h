@@ -17,6 +17,8 @@ class imageInfo : public QObject
 
 public:
     explicit imageInfo(QObject *parent = nullptr);
+    imageInfo( const imageInfo &i);
+    ~imageInfo() {}
 
     QString imageFileName() const { return m_imageFileName; }
     void setImageFileName( QString fname ) { m_imageFileName = fname; m_imageFileNameNormalized = fname.toUpper();}
@@ -44,5 +46,7 @@ private:
     QString m_imageFileNameNormalized;
     bool m_willBeDeleted;
 };
+
+Q_DECLARE_METATYPE(imageInfo)
 
 #endif // IMAGEINFO_H

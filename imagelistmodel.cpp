@@ -1,75 +1,103 @@
+#include <QDebug>
 #include "imagelistmodel.h"
 
 ImageListModel::ImageListModel(QObject *parent)
-    : QAbstractItemModel(parent)
+    : QAbstractListModel(parent)
 {
 }
 
-QModelIndex ImageListModel::index(int row, int column, const QModelIndex &parent) const
+ImageListModel::ImageListModel( const ImageListModel &otherModel ) : QAbstractListModel(otherModel.parent())
 {
-    // FIXME: Implement me!
+    setMyImageFiles(otherModel.myImageFiles());
 }
 
-QModelIndex ImageListModel::parent(const QModelIndex &index) const
-{
-    // FIXME: Implement me!
-}
 
+///
+/// \brief ImageListModel::headerData
+/// \param section
+/// \param orientation
+/// \param role
+/// \return
+///
+//QVariant ImageListModel::headerData(int section, Qt::Orientation orientation, int role) const
+//{
+//    // FIXME: Implement me!
+//}
+
+///
+/// \brief ImageListModel::rowCount
+/// \param parent
+/// \return
+///
 int ImageListModel::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
+    // For list models only the root node (an invalid parent) should return the list's size. For all
+    // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
+    if (parent.isValid())
         return 0;
 
-    // FIXME: Implement me!
-}
-
-int ImageListModel::columnCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
-}
-
-bool ImageListModel::hasChildren(const QModelIndex &parent) const
-{
-    // FIXME: Implement me!
-}
-
-bool ImageListModel::canFetchMore(const QModelIndex &parent) const
-{
-    // FIXME: Implement me!
-    return false;
-}
-
-void ImageListModel::fetchMore(const QModelIndex &parent)
-{
-    // FIXME: Implement me!
+    return m_MyImageFiles->imageNameList().count();
 }
 
 QVariant ImageListModel::data(const QModelIndex &index, int role) const
 {
+    qDebug() << index.isValid();
     if (!index.isValid())
         return QVariant();
 
-    // FIXME: Implement me!
-    return QVariant();
-}
+    // if we're past the end of list of image names
+    if( index.row() >= m_MyImageFiles->imageNameList().count() || index.row() < 0 )
+        return QVariant();
 
-bool ImageListModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if (data(index, role) != value) {
-        // FIXME: Implement me!
-        emit dataChanged(index, index, QVector<int>() << role);
-        return true;
+    // get the list of images associated with this name
+    const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(index.row()));
+
+    if( role == Qt::DisplayRole ) {
+        return QVariant::fromValue(*imgList);
+    } else if( role == ImageRole ) {
+        return QVariant::fromValue(imgList->at(0)->imageFileName());
+    } else if( role == ImageCountRole ) {
+        qDebug() << imgList->count();
+        return QVariant::fromValue(imgList->count());
+    } else if( role == ImageNameRole ) {
+        return QVariant::fromValue(imgList->at(0)->imageFileName());
+    } else {
+        return QVariant();
     }
-    return false;
 }
 
-Qt::ItemFlags ImageListModel::flags(const QModelIndex &index) const
+QString ImageListModel::getImage(int imageCount)
 {
-    if (!index.isValid())
-        return Qt::NoItemFlags;
+    if(imageCount >= curImageListCount()) // oops, off the end
+        return QString();
 
-    return Qt::ItemIsEditable; // FIXME: Implement me!
+    // get the list of images associated with this name
+    const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(m_row));
+    return imgList->at(imageCount)->imageFullPath().absolutePath();
 }
+
+
+//bool ImageListModel::insertRows(int row, int count, const QModelIndex &parent)
+//{
+//    beginInsertRows(parent, row, row + count - 1);
+//    // FIXME: Implement me!
+//    endInsertRows();
+//}
+
+//bool ImageListModel::removeRows(int row, int count, const QModelIndex &parent)
+//{
+//    beginRemoveRows(parent, row, row + count - 1);
+//    // FIXME: Implement me!
+//    endRemoveRows();
+//}
+
+QHash<int, QByteArray> ImageListModel::roleNames() const {
+
+    QHash<int, QByteArray> roles;
+
+    roles[ImageRole] = "Image";
+    roles[ImageCountRole] = "ImageCount";
+    roles[ImageNameRole] = "ImageName";
+    return roles;
+}
+
