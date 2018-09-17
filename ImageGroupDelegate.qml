@@ -90,6 +90,8 @@ Rectangle {
         onReleased: {
             imageGroupDelegate.setChildrenState( "Default" )
             listImagePaths()
+            appMainWindow.curIndex = index
+            appMainWindow.changeState("DiplayImages")
 //            console.log(index, "Released")
 //            thermoEventListDelegate.ListView.view.currentIndex=index
         }

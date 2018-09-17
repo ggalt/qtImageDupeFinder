@@ -2,6 +2,8 @@
 #define MYAPPLICATIONWINDOW_H
 
 #include <QObject>
+#include <QQmlEngine>
+#include <QQuickView>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QQmlContext>
@@ -26,9 +28,10 @@ signals:
 public slots:
 
 private:
-    QQmlApplicationEngine engine;
-    QQmlComponent *mainComponent;
-    QObject* appWindow;
+//    QQmlApplicationEngine engine;
+//    QObject* appWindow;
+    QQmlEngine *engine;
+    QQuickView *appWindow;
 
     QString pictureDirectory;
 //    int blurValue;

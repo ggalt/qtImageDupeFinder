@@ -23,8 +23,10 @@ myApplicationWindow::~myApplicationWindow()
 
 void myApplicationWindow::Init()
 {
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-    appWindow = engine.rootObjects().first();
+    appWindow = new QQuickView;
+    engine = appWindow->engine();
+//    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+//    appWindow = engine.rootObjects().first();
 
     QSettings settings;
     QString pictureHomeDir = QStandardPaths::standardLocations(
@@ -36,15 +38,17 @@ void myApplicationWindow::Init()
     qDebug() << "Picture Directory is:" << d.absolutePath();
 
     m_Images = new imageFiles(this);
-    m_Images->setupImageProvider(&engine);
+    m_Images->setupImageProvider(engine);
     m_Images->readImageURLsFromDisk(d);
 
     m_ImageListModel = new ImageListModel(this);
     m_ImageListModel->setMyImageFiles(m_Images);
 
-    engine.rootContext()->setContextProperty("myImages", m_Images);
-    engine.rootContext()->setContextProperty("imageListModel", m_ImageListModel);
+    engine->rootContext()->setContextProperty("myImages", m_Images);
+    engine->rootContext()->setContextProperty("imageListModel", m_ImageListModel);
     appWindow->setProperty("pictureHome", pictureHomeDir);
+    appWindow->setSource(QUrl(QLatin1String("qrc:/main.qml")));
+    appWindow->show();
 
 
 //    QVariant returnedValue;
