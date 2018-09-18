@@ -6,7 +6,7 @@ Rectangle {
     objectName: 'mainScrollWindows'
 
     color: "lightgrey"
-    opacity: 0
+    opacity: 1
 
     NumberAnimation on opacity {
         id: fadeInAnimation
@@ -71,7 +71,10 @@ Rectangle {
 
     ScrollView {
         id: scrollView
-        anchors.fill: parent
+        anchors.top: headerBar.bottom
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
 //        anchors.right: parent.right
 //        anchors.left: parent.left
 //        anchors.leftMargin: 0
