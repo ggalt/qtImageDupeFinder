@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 
 Rectangle {
     id:mainScrollWindow
-    objectName: 'mainScrollWindows'
+    objectName: 'mainScrollWindow'
 
     color: "lightgrey"
     opacity: 1

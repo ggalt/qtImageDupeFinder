@@ -102,9 +102,11 @@ Rectangle {
     //            loader.setSource("ImageDisplayWindow.qml")
     //        }
     //    }
+
+
     //////////////////////////////////////////////////////////
     /// FIX ME!!
-    signal loadImageListModel(void) // signal C++ it's time to load the data model
+    signal loadImageListModel() // signal C++ it's time to load the data model
 
     //////////////////////////////////////////////////////////
     // page loader

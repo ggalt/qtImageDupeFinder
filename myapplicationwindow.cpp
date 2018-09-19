@@ -5,6 +5,7 @@
 #include <QVariant>
 #include <QQuickView>
 #include <QDebug>
+#include <QQuickItem>
 
 //#define DISPLAY_DURATION    10 * 1000
 //#define TRANSITION_DURATION 4 * 1000
@@ -58,3 +59,8 @@ void myApplicationWindow::Init()
 //            Q_ARG(QVariant, msg));
 }
 
+void myApplicationWindow::loadImageListModel(void)
+{
+    QObject *scrollWindow = engine->rootContext()->findChild<QObject*>("mainScrollWindow");
+//    scrollWindow->setProperty("imageListModel", QVariant(m_ImageListModel));
+}
