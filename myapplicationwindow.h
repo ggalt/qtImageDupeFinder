@@ -26,7 +26,7 @@ public:
 signals:
 
 public slots:
-    void loadImageListModel(void);
+    void LoadImageListModel(void);
 
 private:
 //    QQmlApplicationEngine engine;

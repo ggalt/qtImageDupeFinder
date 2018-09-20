@@ -17,6 +17,13 @@ Rectangle {
 
     function fadeIn() {
         fadeInAnimation.start()
+        console.log("fade in")
+    }
+
+    Component.onCompleted: {
+        console.log("calling signal")
+        appMainWindow.fireImageLoad()
+        console.log("completed")
     }
 
     Rectangle {

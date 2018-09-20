@@ -24,7 +24,7 @@ myApplicationWindow::~myApplicationWindow()
 
 void myApplicationWindow::Init()
 {
-    appWindow = new QQuickView;
+    appWindow = new QQuickView();
     engine = appWindow->engine();
 //    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 //    appWindow = engine.rootObjects().first();
@@ -47,11 +47,19 @@ void myApplicationWindow::Init()
 
     engine->rootContext()->setContextProperty("myImages", m_Images);
     engine->rootContext()->setContextProperty("imageListModel", m_ImageListModel);
-    appWindow->setProperty("pictureHome", pictureHomeDir);
     appWindow->setSource(QUrl(QLatin1String("qrc:/main.qml")));
+
+    QObject *item = appWindow->rootObject();
+
+    connect(item, SIGNAL(loadImageListModel()),
+            this, SLOT(LoadImageListModel()));
+
+    qDebug() << "Signal connected";
+    appWindow->setProperty("pictureHome", pictureHomeDir);
     appWindow->show();
 
 
+    LoadImageListModel();
 //    QVariant returnedValue;
 //    QVariant msg = "Initialize";
 //    QMetaObject::invokeMethod(appWindow, "setImageState",
@@ -59,8 +67,15 @@ void myApplicationWindow::Init()
 //            Q_ARG(QVariant, msg));
 }
 
-void myApplicationWindow::loadImageListModel(void)
+void myApplicationWindow::LoadImageListModel(void)
 {
+    qDebug() << "called";
     QObject *scrollWindow = engine->rootContext()->findChild<QObject*>("mainScrollWindow");
+    qDebug() << "ENGINE CONTEXT:" << engine->contextForObject(scrollWindow);
+    QQmlContext *scrollContext = new QQmlContext(engine->rootContext());
+    engine->setContextForObject(scrollWindow,scrollContext);
+//    qDebug() << "ENGINE CONTEXT:" << engine->contextForObject(scrollWindow);
+    qDebug() << "value of imageListModel" << scrollContext->contextProperty("imageListModel");
+    scrollContext->setContextProperty("imageListModel", m_ImageListModel);
 //    scrollWindow->setProperty("imageListModel", QVariant(m_ImageListModel));
 }
