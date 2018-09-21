@@ -24,12 +24,27 @@ myApplicationWindow::~myApplicationWindow()
 
 void myApplicationWindow::Init()
 {
-    appWindow = new QQuickView();
-    engine = appWindow->engine();
+    QIcon::setThemeName("gallery");
+
+    QSettings settings;
+    QString style = QQuickStyle::name();
+    if (!style.isEmpty())
+        settings.setValue("style", style);
+    else
+        QQuickStyle::setStyle(settings.value("style").toString());
+
+    engine = new QQmlApplicationEngine();
+    engine->rootContext()->setContextProperty("availableStyles", QQuickStyle::availableStyles());
+
+
+
+
+//    appWindow = new QQuickView();
+//    engine = appWindow->engine();
 //    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 //    appWindow = engine.rootObjects().first();
 
-    QSettings settings;
+//    QSettings settings;
     QString pictureHomeDir = QStandardPaths::standardLocations(
                 QStandardPaths::PicturesLocation).first();
 
@@ -47,24 +62,29 @@ void myApplicationWindow::Init()
 
     engine->rootContext()->setContextProperty("myImages", m_Images);
     engine->rootContext()->setContextProperty("imageListModel", m_ImageListModel);
-    appWindow->setSource(QUrl(QLatin1String("qrc:/main.qml")));
+//    appWindow->setSource(QUrl(QLatin1String("qrc:/main.qml")));
 
-    QObject *item = appWindow->rootObject();
+//    QObject *item = appWindow->rootObject();
 
-    connect(item, SIGNAL(loadImageListModel()),
-            this, SLOT(LoadImageListModel()));
+//    connect(item, SIGNAL(loadImageListModel()),
+//            this, SLOT(LoadImageListModel()));
 
-    qDebug() << "Signal connected";
-    appWindow->setProperty("pictureHome", pictureHomeDir);
-    appWindow->show();
+//    qDebug() << "Signal connected";
+//    appWindow->setProperty("pictureHome", pictureHomeDir);
+//    appWindow->show();
 
 
-    LoadImageListModel();
+//    LoadImageListModel();
 //    QVariant returnedValue;
 //    QVariant msg = "Initialize";
 //    QMetaObject::invokeMethod(appWindow, "setImageState",
 //            Q_RETURN_ARG(QVariant, returnedValue),
 //            Q_ARG(QVariant, msg));
+
+    engine->load(QUrl("qrc:/main.qml"));
+    if (engine->rootObjects().isEmpty())
+        return;
+
 }
 
 void myApplicationWindow::LoadImageListModel(void)

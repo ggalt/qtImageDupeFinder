@@ -43,7 +43,8 @@ public:
     void setMyImageFiles(imageFiles *mf) { m_MyImageFiles = mf;}
 
     QString imageFileName(void) { return data(this->index(m_row),ImageNameRole).toString(); }
-    int curImageListCount(void) { return data(this->index(m_row), ImageCountRole).toInt(); }
+    int curImageListCount(void) { return data(this->index(m_row),ImageCountRole).toInt(); }
+
 
     int row(void) {return m_row;}
     void setRow(int r) {m_row=r;}
@@ -51,6 +52,8 @@ public:
     Q_INVOKABLE QString getImageFileName(int r) { m_row = r; qDebug() << m_row; return imageFileName(); }
     Q_INVOKABLE int getCurImageListCount(int r) { m_row = r; return curImageListCount(); }
     Q_INVOKABLE QString getImage(int imageCount);
+    Q_INVOKABLE QString getImageFileName(int row, int item);
+    Q_INVOKABLE QString getImagePath(int row, int item);
 
 signals:
     void imageNameListChanged(void);

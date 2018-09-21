@@ -6,126 +6,77 @@ Rectangle {
     width: parent.width
     height: 120
 
-    function setChildrenState(newState) {
-        for( var i = 0; i < children.lenght; i++ ) {
-            children[i].state = newState;
-        }
-        imageRectangle.state = newState;
-        countRectangle.state = newState;
-        nameRectangle.state = newState;
-    }
-
-    function listImagePaths() {
-        var imageCountVal = imageListModel.getCurImageListCount(index)
-        for(var i = 0; i < imageCountVal; i++) {
-            console.log(imageListModel.getImage(i))
-        }
-    }
-
-    state: "normal"
-
-    gradient: Gradient {
-        GradientStop {
-            position: 0
-            color: "#00000000"
-        }
-
-        GradientStop {
-            position: 1
-            color: "#4ccecdcd"
-        }
-    }
-
-
-    EdgedButton{
+    Rectangle {
         id: imageRectangle
         width: height
-        anchors.left: parent.left
+        color: "#00000000"
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 0
         anchors.top: parent.top
     }
 
-    EdgedButton {
+    Rectangle {
         id: countRectangle
         width: height
-        anchors.top: parent.top
+        color: "#00000000"
         anchors.left: imageRectangle.right
+        anchors.leftMargin: 0
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 0
 
         Text {
-            id: imageCountText
-            x: 123
-            y: 23
-            color: "#ffffff"
+            id: txtCountText
+            color: "#808080"
             text: imageListModel.getCurImageListCount(index)
-//            text: index
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            anchors.fill: parent
             font.pointSize: 14
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
         }
     }
 
-    EdgedButton {
+    Rectangle {
         id: nameRectangle
-        anchors.right: parent.right
-        anchors.top: parent.top
+        color: "#00000000"
         anchors.left: countRectangle.right
+        anchors.leftMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
+        anchors.top: parent.top
+        anchors.topMargin: 0
 
         Text {
-            id: imageNameText
-            x: 123
-            y: 23
-            color: "#ffffff"
+            id: fileName
+            color: "#808080"
             text: imageListModel.getImageFileName(index)
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            anchors.fill: parent
             font.pointSize: 14
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
         }
     }
 
     MouseArea {
-        id: mouseArea1
+        id: mouseArea
+        hoverEnabled: false
         anchors.fill: parent
-        onReleased: {
-            imageGroupDelegate.setChildrenState( "Default" )
-            listImagePaths()
-            appMainWindow.curIndex = index
-            appMainWindow.changeState("DiplayImages")
-//            console.log(index, "Released")
-//            thermoEventListDelegate.ListView.view.currentIndex=index
-        }
-        onPressed: {
-            imageGroupDelegate.setChildrenState( "Pressed" )
-            console.log(index, "Pressed")
-            //            thermoEventListDelegate.ListView.view.currentIndex=index
+        onClicked: {
+            appWindow.currentItemSelected = index
+            appWindow.listImagePaths()
+            appWindow.imageLineClicked()
         }
     }
 
-
-    states: [
-        State {
-            name: "normal"
-            //            when: !thermoEventListDelegate.ListView.isCurrentItem
-            //            PropertyChanges {
-            //                target: thermoEventListDelegate
-            //                border.width: 1
-            //                border.color: "#ccffffff"
-            //            }
-        },
-        State {
-            name: "selected"
-            //            when: thermoEventListDelegate.ListView.isCurrentItem
-            //            PropertyChanges {
-            //                target: thermoEventListDelegate
-            //                border.width: 4
-            //                border.color: "yellow"
-            //            }
-
-            //            PropertyChanges {
-            //                target: gradientStop1
-            //                color: "#4cccff00"
-            //            }
-        }
-    ]
 }
+
+/*##^## Designer {
+    D{i:12;anchors_height:200;anchors_x:13;anchors_y:8}D{i:14;anchors_height:200}D{i:15;anchors_height:200;anchors_width:200}
+D{i:18;anchors_height:100;anchors_width:100}
+}
+ ##^##*/

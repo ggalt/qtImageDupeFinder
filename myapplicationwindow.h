@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QString>
 #include <QVariant>
+#include <QQuickStyle>
+#include <QIcon>
 
 #include "imagefiles.h"
 #include "imagelistmodel.h"
@@ -29,10 +31,10 @@ public slots:
     void LoadImageListModel(void);
 
 private:
-//    QQmlApplicationEngine engine;
-//    QObject* appWindow;
-    QQmlEngine *engine;
-    QQuickView *appWindow;
+    QQmlApplicationEngine *engine;
+    QObject* appWindow;
+//    QQmlEngine *engine;
+//    QQuickView *appWindow;
 
     QString pictureDirectory;
 //    int blurValue;

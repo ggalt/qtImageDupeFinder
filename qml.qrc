@@ -3,8 +3,8 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>ImageGroupDelegate.qml</file>
-        <file>EdgedButton.qml</file>
         <file>ImageDisplayWindow.qml</file>
-        <file>MainScrollWindow.qml</file>
+        <file>ImageRectangle.qml</file>
+        <file>DSC_0053.JPG</file>
     </qresource>
 </RCC>

@@ -76,6 +76,29 @@ QString ImageListModel::getImage(int imageCount)
     return imgList->at(imageCount)->imageFullPath().absolutePath();
 }
 
+QString ImageListModel::getImageFileName(int row, int item)
+{
+    QModelIndex idx = this->index(row);
+    if( idx.row() >= m_MyImageFiles->imageNameList().count() || idx.row() < 0 )
+        return QString();
+
+    // get the list of images associated with this name
+    const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(idx.row()));
+
+    return imgList->at(item)->imageFileName();
+}
+
+QString ImageListModel::getImagePath(int row, int item)
+{
+    QModelIndex idx = this->index(row);
+    if( idx.row() >= m_MyImageFiles->imageNameList().count() || idx.row() < 0 )
+        return QString();
+
+    // get the list of images associated with this name
+    const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(idx.row()));
+
+    return imgList->at(item)->imagePath().absolutePath();
+}
 
 //bool ImageListModel::insertRows(int row, int count, const QModelIndex &parent)
 //{
