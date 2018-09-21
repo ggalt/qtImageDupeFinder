@@ -24,6 +24,28 @@ ApplicationWindow {
     property int imageWidth: 0
     property int imageHeight: 0
 
+    function setupGrid(itemCount, gridHeight, gridWidth) {
+        photoCount = itemCount
+        var rowCount = 1
+        while(rowCount < itemCount) {
+            var displayBoxWidth = (gridWidth * rowCount)/ itemCount
+            if(gridHeight - (displayBoxWidth *rowCount ) < displayBoxWidth) {
+                numRows = rowCount
+                numColumns = (photoCount / numRows) + (photoCount % numRows)
+                imageWidth = gridWidth / numColumns - colSpacing
+                imageHeight = gridHeight / numRows - colSpacing
+                if(imageWidth > imageHeight)
+                    imageWidth = imageHeight
+                else
+                    imageHeight = imageWidth
+                console.log("Rows:",numRows,"Columns:",numColumns)
+                return
+            }
+            rowCount++
+        }
+    }
+
+
     function spreadRows(itemCount) {
         photoCount = itemCount
         var sqrt_items = Math.sqrt(itemCount)
@@ -48,7 +70,10 @@ ApplicationWindow {
 
 
     function imageLineClicked() {
-        spreadRows(imageListModel.getCurImageListCount(currentItemSelected))
+        setupGrid(8, appWindow.height-toolBar.height, appWindow.width)
+//        setupGrid(imageListModel.getCurImageListCount(currentItemSelected), appWindow.height-toolBar.height, appWindow.width)
+//        spreadRows(imageListModel.getCurImageListCount(currentItemSelected))
+        console.log("Setup Grid:", photoCount, numColumns, numRows)
         stackView.push("qrc:ImageDisplayWindow.qml")
     }
 
@@ -92,6 +117,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+        id: toolBar
         Material.foreground: "white"
 
         RowLayout {
