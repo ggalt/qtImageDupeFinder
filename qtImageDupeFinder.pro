@@ -28,7 +28,12 @@ QML_IMPORT_PATH =
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-QMAKE_MAC_SDK = macosx10.14
+macx{
+    QMAKE_MAC_SDK = macosx10.14
+}
+win32 {
+    QMAKE_LFLAGS_WINDOWS += -Wl,--large-address-aware
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -41,3 +46,5 @@ HEADERS += \
     myimageprovider.h \
     myapplicationwindow.h \
     imagelistmodel.h
+
+DISTFILES +=

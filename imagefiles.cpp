@@ -81,7 +81,7 @@ void imageFiles::ReadURLs()
 
 void imageFiles::setupImageProvider(QQmlEngine *eng)
 {
-    imageProvider = new MyImageProvider(QQmlImageProviderBase::Image);
+    imageProvider = new MyImageProvider(QQmlImageProviderBase::Pixmap);
     eng->addImageProvider("myImageProvider", imageProvider);
 }
 

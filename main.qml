@@ -18,17 +18,19 @@ ApplicationWindow {
     ////////////////////////////////////////////////
     // properties and functions for ImageDisplayWindow
     property int numRows: 1
-    property int numColumns: 3
+    property int numColumns: 1
     property int colSpacing: 3
-    property int photoCount: 15
+    property int photoCount: 1
     property int imageWidth: 0
     property int imageHeight: 0
+    property int gridTopPadding: 0
+    property int gridBottomPadding: 0
 
-    function setupGrid(itemCount, gridHeight, gridWidth) {
-        photoCount = itemCount
+    function setupGrid(gridHeight, gridWidth) {
+        photoCount = imageListModel.getCurImageListCount(currentItemSelected)
         var rowCount = 1
-        while(rowCount < itemCount) {
-            var displayBoxWidth = (gridWidth * rowCount)/ itemCount
+        while(rowCount < photoCount) {
+            var displayBoxWidth = (gridWidth * rowCount)/ photoCount
             if(gridHeight - (displayBoxWidth *rowCount ) < displayBoxWidth) {
                 numRows = rowCount
                 numColumns = (photoCount / numRows) + (photoCount % numRows)
@@ -38,7 +40,7 @@ ApplicationWindow {
                     imageWidth = imageHeight
                 else
                     imageHeight = imageWidth
-                console.log("Rows:",numRows,"Columns:",numColumns)
+                gridTopPadding = gridBottomPadding = (gridHeight - (imageHeight * numRows)) / 2
                 return
             }
             rowCount++
@@ -46,42 +48,32 @@ ApplicationWindow {
     }
 
 
-    function spreadRows(itemCount) {
-        photoCount = itemCount
-        var sqrt_items = Math.sqrt(itemCount)
-        numRows = sqrt_items/1.618
-        numColumns = sqrt_items * 1.618
-        console.log("Rows:",numRows,"Columns:",numColumns)
-        numRows = numRows<=0 ? 1 : numRows
-        numColumns = numColumns<=0 ? 1 : numColumns
-        numRows = 1
-        numColumns = 3
-        colSpacing = 3
-        imageWidth = width / numColumns - colSpacing
-        imageHeight = height / numRows - colSpacing
-        if(imageWidth > imageHeight)
-            imageWidth = imageHeight
-        else
-            imageHeight = imageWidth
-        console.log("Rows:",numRows,"Columns:",numColumns)
-    }
-
     ////////////////////////////////////////////////
+
+    function showBusyIndicator(isTrue) {
+//        busyIndicator.running = isTrue
+        if(isTrue) {
+            stackView.push("qrc:/StackViewBusyIndicator.qml")
+        }
+        console.log("Busy Indicator is:",isTrue)
+    }
 
 
     function imageLineClicked() {
-        setupGrid(8, appWindow.height-toolBar.height, appWindow.width)
+        setupGrid(appWindow.height-toolBar.height, appWindow.width)
 //        setupGrid(imageListModel.getCurImageListCount(currentItemSelected), appWindow.height-toolBar.height, appWindow.width)
 //        spreadRows(imageListModel.getCurImageListCount(currentItemSelected))
         console.log("Setup Grid:", photoCount, numColumns, numRows)
         stackView.push("qrc:ImageDisplayWindow.qml")
+        showBusyIndicator(false)
     }
 
     function listImagePaths() {
         var imageCountVal = imageListModel.getCurImageListCount(currentItemSelected)
-        for(var i = 0; i < imageCountVal; i++) {
-            console.log(imageListModel.getImage(i))
-        }
+        showBusyIndicator(true)
+//        for(var i = 0; i < imageCountVal; i++) {
+//            console.log(imageListModel.getImage(i))
+//        }
     }
 
     function closeImageDisplayWindow() {
@@ -95,6 +87,14 @@ ApplicationWindow {
 
     function getFileName(pos) {
         return imageListModel.getImageFileName(currentItemSelected, pos)
+    }
+
+    function getFilePath(pos) {
+        return imageListModel.getImagePath(currentItemSelected, pos)
+    }
+
+    function getFileSource(pos) {
+        return imageListModel.getImageSource(currentItemSelected, pos)
     }
 
     Settings {
@@ -169,47 +169,34 @@ ApplicationWindow {
     }
 
 
+    BusyIndicator {
+        id: busyIndicator
+//        anchors.centerIn: parent
+        running: false
+    }
+
     StackView {
         id: stackView
+        z: -1
         anchors.fill: parent
 
         initialItem:     ScrollView {
             id: scrollView
-            x:0
-            y:0
-            width: parent.width
-            height: parent.height
+//            x:0
+//            y:0
+//            width: parent.width
+//            height: parent.height
             clip: true
 
-            //            Component {
-            //                id: itemHighlight
-            //                Rectangle {
-            //                    width: parent.width
-            //                    height: 100
-            //                    color: "lightsteelblue"; radius: 5
-            //                    opacity: 0.40
-            //                    y: mainListView.currentItem.y
-            //                    Behavior on y {
-            //                        SpringAnimation {
-            //                            spring: 3
-            //                            damping: 0.2
-            //                        }
-            //                    }
-            //                }
-            //            }
 
             ListView {
                 id: mainListView
                 width: parent.width
                 model: imageListModel
-                highlight: Rectangle {
-                    color: "#66808080"
-                    border.color: "black"
-                    anchors.fill: parent
-                }
-                highlightFollowsCurrentItem: true
+//                highlight: imgDelegate.highlightBar
+                highlightFollowsCurrentItem: false
                 focus: true
-
+                currentIndex: 2
                 delegate: ImageGroupDelegate{}
             }
         }

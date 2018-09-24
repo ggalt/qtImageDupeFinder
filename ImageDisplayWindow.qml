@@ -33,6 +33,8 @@ Rectangle {
         anchors.fill: parent
         columns: appWindow.numColumns
         spacing: appWindow.colSpacing
+        topPadding: appWindow.gridTopPadding
+        bottomPadding: appWindow.gridBottomPadding
 
         Repeater {
             id:gridRepeater
@@ -40,57 +42,64 @@ Rectangle {
             delegate:Rectangle {
                 width: appWindow.imageWidth
                 height: appWindow.imageHeight
-                Image {
-                    id: image
-                    width: parent.width
-                    height: parent.height
-                    autoTransform: true
-                    fillMode: Image.PreserveAspectFit
-
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    source: "qrc:/DSC_0053.JPG"
-
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                    }
-                }
-
                 Switch {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.leftMargin: 2
+                    anchors.topMargin: 2
                     id: deleteSwitch
                     text: qsTr("Delete Image")
                 }
 
                 Text {
                     id: txtFileName
-                    text: qsTr("Filename:"+appWindow.getFileName(0))
+                    text: qsTr("Filename:"+appWindow.getFileName(index))
                     horizontalAlignment: Text.AlignHCenter
-                    anchors.top: image.bottom
-                    anchors.topMargin: 0
+                    anchors.bottom: txtResolution.top
+                    anchors.bottomMargin: 2
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: 12
                 }
 
                 Text {
                     id: txtResolution
-                    x: 322
                     text: qsTr("Resolution:")
                     horizontalAlignment: Text.AlignHCenter
-                    anchors.top: txtFileName.bottom
-                    anchors.topMargin: 0
+                    anchors.bottom: txtPath.top
+                    anchors.bottomMargin: 2
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: 12
                 }
 
                 Text {
                     id: txtPath
-                    text: qsTr("Path:")
+                    text: qsTr("Path:"+appWindow.getFilePath(index))
+                    horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: txtResolution.bottom
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 2
                     font.pixelSize: 12
                 }
+                Image {
+                    id: image
+                    anchors.top: parent.top
+                    anchors.topMargin: 2
+                    anchors.bottom: txtFileName.top
+                    anchors.bottomMargin: 2
+                    width: image.height
 
+                    autoTransform: true
+                    fillMode: Image.PreserveAspectFit
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: getFileSource(index)
+//                    source: "qrc:/DSC_0053.JPG"
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                    }
+                }
             }
 
         }

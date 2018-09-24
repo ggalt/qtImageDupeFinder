@@ -18,7 +18,7 @@
 class imageFiles : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QHash<QString, QList<imageInfo*>*> imageList READ imageList WRITE setImageList NOTIFY imageListChanged)
+//    Q_PROPERTY(QHash<QString, QList<imageInfo*>*> imageList READ imageList WRITE setImageList NOTIFY imageListChanged)
     Q_PROPERTY(QStringList imageNameList READ imageNameList WRITE setImageNameList NOTIFY imageNameListChanged)
     Q_PROPERTY(int imageCount READ imageCount WRITE setImageCount NOTIFY imageCountChanged)
     Q_PROPERTY(int imagePointer READ imagePointer WRITE setImagePointer NOTIFY imagePointerChanged)

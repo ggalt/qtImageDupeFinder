@@ -1,10 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 
+
 Rectangle {
-    id: imageGroupDelegate
     width: parent.width
     height: 120
+    id: imageGroupDelegate
 
     Rectangle {
         id: imageRectangle
@@ -64,7 +65,7 @@ Rectangle {
 
     MouseArea {
         id: mouseArea
-        hoverEnabled: false
+        hoverEnabled: true
         anchors.fill: parent
         onClicked: {
             appWindow.currentItemSelected = index
@@ -72,11 +73,49 @@ Rectangle {
             appWindow.imageLineClicked()
         }
     }
-
 }
 
+
+
+//        Rectangle {
+//            id: mouseHoverHightlight
+//            color: "#ffffff"
+//            anchors.fill: parent
+//        }
+
+//        Connections {
+//            target: mouseArea
+//            onEntered: { imageGroupDelegate.state = "mouseHover" }
+//        }
+
+//        Connections {
+//            target: mouseArea
+//            onExited: { imageGroupDelegate.state = "mouseAbsent" }
+//        }
+
+//        states: [
+//            State {
+//                name: "mouseHover"
+
+//                PropertyChanges {
+//                    target: mouseHoverHightlight
+//                    color: "#808080"
+//                    opacity: 0.5
+//                }
+//            },
+//            State {
+//                name: "mouseAbsent"
+
+//                PropertyChanges {
+//                    target: mouseHoverHightlight
+//                    color: "#808080"
+//                    opacity: 0
+//                }
+//            }
+//        ]
+
+
 /*##^## Designer {
-    D{i:12;anchors_height:200;anchors_x:13;anchors_y:8}D{i:14;anchors_height:200}D{i:15;anchors_height:200;anchors_width:200}
-D{i:18;anchors_height:100;anchors_width:100}
+    D{i:11;anchors_height:200;anchors_width:200}
 }
  ##^##*/

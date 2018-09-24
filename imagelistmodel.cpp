@@ -85,6 +85,9 @@ QString ImageListModel::getImageFileName(int row, int item)
     // get the list of images associated with this name
     const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(idx.row()));
 
+    if(item >= imgList->count())
+        return QString();
+
     return imgList->at(item)->imageFileName();
 }
 
@@ -97,22 +100,29 @@ QString ImageListModel::getImagePath(int row, int item)
     // get the list of images associated with this name
     const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(idx.row()));
 
+    if(item >= imgList->count())
+        return QString();
+
     return imgList->at(item)->imagePath().absolutePath();
 }
 
-//bool ImageListModel::insertRows(int row, int count, const QModelIndex &parent)
-//{
-//    beginInsertRows(parent, row, row + count - 1);
-//    // FIXME: Implement me!
-//    endInsertRows();
-//}
+QString ImageListModel::getImageSource(int row, int item) {
+    qDebug() << "row:" << row << "Item:" << item;
+    QModelIndex idx = this->index(row);
+    if( idx.row() >= m_MyImageFiles->imageNameList().count() || idx.row() < 0 )
+        return QString();
 
-//bool ImageListModel::removeRows(int row, int count, const QModelIndex &parent)
-//{
-//    beginRemoveRows(parent, row, row + count - 1);
-//    // FIXME: Implement me!
-//    endRemoveRows();
-//}
+    // get the list of images associated with this name
+    const QList<imageInfo*> *imgList = m_MyImageFiles->imageList().value(m_MyImageFiles->imageNameList().at(idx.row()));
+
+    if(item >= imgList->count())
+        return QString("qrc:/hole-2038431_640.png");
+
+//    QString imageURL = "image://myImageProvider/"+imgList->at(item)->imageFullPath().absolutePath();
+    QString imageURL = "file:///"+imgList->at(item)->imageFullPath().absolutePath();
+    qDebug() << "Image URL:" << imageURL;
+    return imageURL;
+}
 
 QHash<int, QByteArray> ImageListModel::roleNames() const {
 

@@ -18,7 +18,7 @@ class ImageListModel : public QAbstractListModel
     Q_PROPERTY(QString imageFileName READ imageFileName CONSTANT)
     Q_PROPERTY(int curImageListCount READ curImageListCount CONSTANT)
     Q_PROPERTY(QStringList imageNameList READ imageNameList CONSTANT)
-    Q_PROPERTY(QHash<QString, QList<imageInfo*>*> imageList READ imageList CONSTANT)
+//    Q_PROPERTY(QHash<QString, QList<imageInfo*>*> imageList READ imageList CONSTANT)
 
 public:
     ImageListModel(QObject *parent = nullptr);
@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE QString getImage(int imageCount);
     Q_INVOKABLE QString getImageFileName(int row, int item);
     Q_INVOKABLE QString getImagePath(int row, int item);
+    Q_INVOKABLE QString getImageSource(int row, int item);
 
 signals:
     void imageNameListChanged(void);

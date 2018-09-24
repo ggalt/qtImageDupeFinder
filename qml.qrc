@@ -5,6 +5,7 @@
         <file>ImageGroupDelegate.qml</file>
         <file>ImageDisplayWindow.qml</file>
         <file>ImageRectangle.qml</file>
-        <file>DSC_0053.JPG</file>
+        <file>hole-2038431_640.png</file>
+        <file>StackViewBusyIndicator.qml</file>
     </qresource>
 </RCC>
